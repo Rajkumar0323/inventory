@@ -1,4 +1,12 @@
-//Should be in extension/variant-stock-widget/blocks
+npm run shopify app generate extension
+
+npm run shopify app dev
+npm run shopify app deploy
+
+
+
+
+//Should be in extension/variant-stock-widget/blocks/variant-stock.liquid
 <script src="{{ 'variant-stock.js' | asset_url }}"></script>
 
 {% assign selected_variant = product.selected_or_first_available_variant %}
