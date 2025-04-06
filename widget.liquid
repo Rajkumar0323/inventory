@@ -1,1 +1,24 @@
 
+<script src="{{ 'variant-stock.js' | asset_url }}"></script>
+
+{% assign selected_variant = product.selected_or_first_available_variant %}
+
+<div style="width: 100%; margin-top: 10px; text-align: right;">
+  {% if selected_variant.inventory_quantity > 0 %}
+    <div style="padding: 10px 0; font-weight: bold; color: green;">
+      ✅ In stock: {{ selected_variant.inventory_quantity }} items left
+    </div>
+  {% else %}
+    <div style="padding: 10px 0; font-weight: bold; color: red;">
+      ❌ Out of Stock
+    </div>
+  {% endif %}
+</div>
+
+{% schema %}
+{
+  "name": "Variant Stock Widget",
+  "target": "section",
+  "settings": []
+}
+{% endschema %}
