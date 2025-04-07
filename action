@@ -1,1 +1,49 @@
 
+import { json } from "@remix-run/node";
+import { authenticate } from "~/shopify.server";
+
+export const action = async ({ request }) => {
+  const { admin } = await authenticate.admin(request);
+
+  const mutation = `
+    mutation inventoryAdjustQuantities($input: InventoryAdjustQuantitiesInput!) {
+      inventoryAdjustQuantities(input: $input) {
+        inventoryAdjustmentGroup {
+          id
+          reason
+          changes {
+            delta
+            quantityAfterChange
+            location {
+              id
+            }
+          }
+        }
+        userErrors {
+          field
+          message
+        }
+      }
+    }
+  `;
+
+  const variables = {
+    input: {
+      reason: "correction",
+      changes: [
+        {
+          delta: 5,
+          inventoryItemId: "gid://shopify/InventoryItem/49457295294706",
+          locationId: "gid://shopify/Location/81998348530",
+        },
+      ],
+    },
+  };
+
+  const result = await admin.graphql(mutation, { variables });
+  const jsonResult = await result.json();
+
+  console.log("✅ Result:", JSON.stringify(jsonResult, null, 2));
+
+  return json({ message: "Quantity updated", result: jsonResult });
+};
