@@ -1,1 +1,88 @@
 
+ DASHBOARD (Home Page)
+Your central place to give the merchant a bird’s-eye view.
+
+Sections to Include:
+Progress / Overview Cards
+
+🛍️ Total Products
+
+📦 Total Inventory Items
+
+🧾 Total Orders
+
+🗺️ Total Locations
+
+Top-Selling Inventory Items
+
+Table showing:
+
+Image + Title
+
+Number of Orders
+
+Available Inventory (editable inline)
+
+Listing Status (Active/Draft/Archived)
+
+Low-Stock Items
+
+Table showing:
+
+Image + Title
+
+Quantity at different locations
+
+Reorder Threshold Indicator (e.g., red if low)
+
+Inventory Summary Graphs (Optional)
+
+Bar/Line chart for stock level trends, incoming stock, etc.
+
+📄 INVENTORY PAGE
+List all inventory items with filters and bulk actions.
+
+Features:
+Search & Filter by SKU, Title, Location, etc.
+
+Bulk Adjust Quantity
+
+View/Edit Inventory Item Details (opens drawer or modal)
+
+Filter by low stock, out-of-stock, overstock, etc.
+
+🔍 PRODUCT DETAILS PAGE
+Shows detailed inventory per product.
+
+Product Info (image, title, SKU)
+
+Inventory by Location
+
+Edit stock levels
+
+Add notes/logs for inventory adjustments (optional)
+
+🗺️ LOCATIONS PAGE
+Manage inventory levels per location.
+
+Location Name
+
+Inventory assigned
+
+Adjustments allowed
+
+Transfer stock between locations
+
+🔄 ADJUSTMENT HISTORY PAGE
+Track inventory changes over time.
+
+Date
+
+Reason (correction, damaged, received, etc.)
+
+Delta (+/-)
+
+Who made the change
+
+Notes (if any)
+
