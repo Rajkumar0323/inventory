@@ -1,0 +1,73 @@
+import { useLoaderData } from "@remix-run/react";
+
+export default function ProductOrdersPage() {
+  const { orderCounts } = useLoaderData();
+
+  return (
+    <div style={{ padding: "20px" }}>
+      <h2>Order Counts</h2>
+      <ul>
+        {Object.entries(orderCounts).map(([id, count]) => (
+          <li key={id}>
+            ID: <strong>{id}</strong> → <strong>{count}</strong> orders
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}import { json } from "@remix-run/node";
+import { authenticate } from "~/shopify.server";
+
+export const loader = async ({ request }) => {
+  const url = new URL(request.url);
+  const idsParam = url.searchParams.get("ids"); // comma-separated
+  const type = url.searchParams.get("type"); // 'variant' or 'product'
+
+  if (!idsParam || !["product", "variant"].includes(type)) {
+    throw new Response("Invalid query params", { status: 400 });
+  }
+
+  const ids = idsParam.split(",").map(id => id.trim()); // array of string IDs
+  const { admin } = await authenticate.admin(request);
+
+  const response = await admin.graphql(`
+    {
+      orders(first: 50, reverse: true) {
+        edges {
+          node {
+            id
+            name
+            lineItems(first: 10) {
+              edges {
+                node {
+                  product { id }
+                  variant { id }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  `);
+
+  const data = await response.json();
+  const orders = data.data.orders.edges;
+
+  // Build result as: { [id]: count }
+  const result = {};
+
+  ids.forEach(id => (result[id] = 0));
+
+  orders.forEach(({ node: order }) => {
+    const lineItems = order.lineItems.edges;
+
+    const foundIDs = new Set();
+
+    lineItems.forEach(({ node: item }) => {
+      ids.forEach(id => {
+        const match =
+          type === "product"
+            ? item.product?.id?.endsWith(`/${id}`)
+            : item.variant?.id?.endsWith(`/${id}`);
+        
